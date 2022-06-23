@@ -1,0 +1,29 @@
+all:
+  control_plane:
+    hosts:
+      control_plane_1:
+        ansible_host: <IP ADDRESS>
+        ansible_port: <PORT>
+        ansible_user: <PORT>
+        ansible_password: <PASSWORD>
+        ansible_ssh_private_key_file: </path/to/pem>
+    vars:
+      # DO NOT CHANGE THIS
+      IS_CONTROL_PLANE: true
+  worker_node:
+    hosts:
+      worker_node_1:
+        ansible_host: <IP ADDRESS>
+        ansible_port: <PORT>
+        ansible_user: <PORT>
+        ansible_password: <PASSWORD>
+        ansible_ssh_private_key_file: </path/to/pem>
+      worker_node_2:
+        ansible_host: <IP ADDRESS>
+        ansible_port: <PORT>
+        ansible_user: <PORT>
+        ansible_password: <PASSWORD>
+        ansible_ssh_private_key_file: </path/to/pem>
+      vars:
+        # DO NOT CHANGE THIS
+        IS_CONTROL_PLANE: false

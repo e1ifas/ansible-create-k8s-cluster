@@ -1,0 +1,13 @@
+- hosts: all
+  become: true
+  vars_files:
+    - ./vars/variables.yaml
+  roles:
+    - varidation # os and spec
+    - install_helm
+    - install_docker
+    - install_kube_utilities # kubeadm, kubelet and kubectl
+    - install_containerd
+    - activate_control_plane
+    - activate_worker_nodes
+    - review_cluster_setup

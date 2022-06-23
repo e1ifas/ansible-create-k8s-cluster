@@ -1,0 +1,3 @@
+ansible.builtin.import_tasks:
+  - install_helm.yaml
+when: IS_CONTROL_PLANE

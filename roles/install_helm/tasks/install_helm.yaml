@@ -1,0 +1,27 @@
+- name: Add an Apt signing key to a specific keyring file
+  ansible.builtin.apt_key:
+    url: https://baltocdn.com/helm/signing.asc
+    keyring: /usr/share/keyrings/helm.gpg
+
+- name: Install the package apt-transport-https
+  ansible.builtin.apt:
+    name: apt-transport-https
+
+- name: Get dpkg architecture
+  ansible.builtin.shell: dpkg --print-architecture
+  register: DPKG_ARCHITECTURE
+
+- name: Create apt source list
+  ansible.builtin.blockinfile:
+    path: /etc/apt/sources.list.d/helm-stable-debian.list
+    block: |
+      deb [arch={{ DPKG_ARCHITECTURE.stdout }} signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main
+
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+
+- name: Install helm
+  ansible.builtin.apt:
+    name: helm

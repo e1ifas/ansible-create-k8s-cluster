@@ -1,0 +1,4 @@
+- name: Validate OS distribution
+  ansible.builtin.assert:
+    that: ansible_distribution in COMPATIBLE_OS_DIST
+    fail_msg: "The OS distribution of target host is not compatible."

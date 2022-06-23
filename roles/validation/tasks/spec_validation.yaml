@@ -1,0 +1,9 @@
+- name: Validate vCPU
+  ansible.builtin.assert:
+    that: ansible_processor_vcpus >= 2
+    fail_msg: "vCPU is not sufficient (Required >= 2)."
+
+- name: Validate Memory
+  ansible.builtin.assert:
+    that: ansible_memtotal_mb >= 1700
+    fail_msg: "Memory is not sufficient (Required >= 1700)."

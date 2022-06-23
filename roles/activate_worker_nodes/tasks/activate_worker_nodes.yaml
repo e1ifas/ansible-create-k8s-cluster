@@ -1,0 +1,7 @@
+- name: Enter the result of kubeadm init command
+  ansible.builtin.pause:
+    prompt: "Enter the result of kubeadm init command copied above: (e.g.: kubeadm join xxx.xxx.xxx.xxx...)"
+  register: RESULT_OF_KUBEADM_INIT_COMMAND
+
+- name: Execute kubeadm join
+  ansible.builtin.shell: "{{ RESULT_OF_KUBEADM_INIT_COMMAND }}"

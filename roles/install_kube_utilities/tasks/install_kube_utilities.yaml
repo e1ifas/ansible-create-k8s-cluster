@@ -1,0 +1,42 @@
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+
+- name: Install packages needed to use the Kubernetes apt repository
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+
+- name: Download the Google Cloud public signing key
+  ansible.builtin.apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    keyring: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+
+- name: Add the Kubernetes apt repository
+  ansible.builtin.blockinfile:
+    path: /etc/apt/sources.list.d/kubernetes.list
+    block: |
+      deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
+
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+
+- name: Install kubectl, kubeadm and kubectl
+  ansible.builtin.apt:
+    name:
+      - kubectl
+      - kubeadm
+      - kubectl
+
+- name: Prevent kubelet, kubeadm and kubectl from being upgraded
+  ansible.builtin.dpkg_selections:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    selection: hold

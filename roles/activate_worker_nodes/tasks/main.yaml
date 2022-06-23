@@ -1,0 +1,3 @@
+ansible.builtin.import_tasks:
+  - activate_worker_nodes.yaml
+when: not IS_CONTROL_PLANE

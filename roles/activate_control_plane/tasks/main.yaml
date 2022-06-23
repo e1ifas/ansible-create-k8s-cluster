@@ -1,0 +1,3 @@
+ansible.builtin.import_tasks:
+  - activate_control_plane.yaml
+when: IS_CONTROL_PLANE

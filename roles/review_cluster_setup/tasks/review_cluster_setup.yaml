@@ -1,0 +1,12 @@
+- name: Enable CNI plugin
+  ansible.builtin.shell: "{{ item }}"
+  with_items:
+    - 'kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml'
+    - 'kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml'
+
+- name: Retry a task until nodes statuses become Ready
+  ansible.builtin.shell: kubectl get nodes
+  register: KUBECTL_GET_NODES_RESULT
+  until: KUBECTL_GET_NODES_RESULT.stdout.find("NotReady") == -1
+  retries: 10
+  delay: 10

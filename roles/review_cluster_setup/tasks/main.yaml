@@ -1,0 +1,3 @@
+ansible.builtin.import_tasks:
+  - review_cluster_setup.yaml
+when: IS_CONTROL_PLANE

@@ -1,0 +1,42 @@
+- name: Execute kubeadm init
+  ansible.builtin.shell: "kubeadm init --pod-network-cidr={{ POD_NETWORK_CIDR }}"
+  register: KUBEADM_INIT_RTN
+
+- name: Prints the result of kubeadm init
+  ansible.builtin.debug:
+    msg:
+      - "Copy the kubeadm join xxx.xxx.xxx.xxx... section for the later use."
+      - "{{ KUBEADM_INIT_RTN.stdout_lines }}"
+
+- name: Pause until result is copied by user
+  ansible.builtin.pause:
+    prompt: "Make sure result above is copied. Then ENTER key to proceed."
+
+- name: Get the home directory of user
+  ansible.builtin.shell: "echo ~{{ INSTALL_AS_USER }}"
+  register: HOME_DIRECTORY_OF_USER
+
+- name: Create a directory ~/.kube if it does not exist
+  ansible.builtin.file:
+    path: "{{ HOME_DIRECTORY_OF_USER.stdout }}/.kube"
+    state: directory
+    owner: "{{ INSTALL_AS_USER }}"
+    group: "{{ INSTALL_AS_USER }}"
+
+- name: Copy /etc/kubernetes/admin.conf
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ HOME_DIRECTORY_OF_USER.stdout }}/.kube/config"
+    owner: "{{ INSTALL_AS_USER }}"
+    group: "{{ INSTALL_AS_USER }}"
+
+- name: Change the file permission
+  ansible.builtin.file:
+    path: "{{ item.content }}"
+    state: "{{ item.type }}"
+    owner: "{{ INSTALL_AS_USER }}"
+    group: "{{ INSTALL_AS_USER }}"
+  with_items:
+    - { type: directory, content: /lib/kubelet }
+    - { type: directory, content: /lib/kubelet/pki }
+    - { type: file, content: /lib/kubelet/pki/kubelet-client-current.pem }
