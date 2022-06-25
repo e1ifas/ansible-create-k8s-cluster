@@ -1,6 +1,14 @@
 # ansible-create-k8s-cluster
 Ansible playbook to create Kubernetes cluster
 
+# Prerequisite
+
+|CPUs|RAM|
+|:-:|:-:|
+|`>= 2`|`>= 1700 MB`|
+
+OS Distribution: Ubuntu
+
 # Usage
 
 ## Edit inventory
